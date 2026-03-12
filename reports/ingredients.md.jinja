@@ -1,0 +1,9 @@
+{{ metadata }}
+
+Scale: {{ scale }}x
+
+## Les ingrédients
+{%- for ingredient in ingredients %}
+- {{ ingredient.name }} {{ ingredient.quantity }}
+{%- endfor %}
+
