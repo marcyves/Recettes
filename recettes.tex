@@ -1,37 +1,21 @@
-%%%%%%%%%%%% !TEX TS-program = XeLaTeX
-\documentclass[12pt,twoside,svgnames,x11names, a4paper]{book}
-
-\usepackage{fontspec}
-%\setmainfont{Amilya}[
-%    Path=./Amilya/,
-%    Extension = .ttf,
-%    UprightFont=*,
-%    BoldFont=*,
-%    ItalicFont=*,
-%    BoldItalicFont=*
-%    ]
-%
-%\setsansfont{Amilya}[
-%    Path=./Amilya/,
-%    Scale=0.9,
-%    Extension = .ttf,
-%    UprightFont=*,
-%    BoldFont=*,
-%    ItalicFont=*,
-%    BoldItalicFont=*
-%    ]
-
-
+% !TEX TS-program = XeLaTeX
+\documentclass[12pt,twoside, svgnames, a4paper]{book}
+\usepackage[french]{babel}
 \usepackage{wallpaper}
 \usepackage{changepage}
 \usepackage[explicit,clearempty]{titlesec}
 \usepackage{fancyhdr}
+
+\usepackage{fontspec}
+\usepackage{xcolor}
 \usepackage{tikz}
-\usetikzlibrary{shapes,positioning}
+\usetikzlibrary{shapes, positioning, shadows}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{etoolbox}
 \usepackage[final]{pdfpages}
-\usepackage[french]{babel} %  language/hyphenation
 \usepackage{xpatch}
-\usepackage{geometry}
+\usepackage[a4paper, top=2.5cm, bottom=14mm, left=2.5cm, right=2cm]{geometry}
 %\geometry{
 %   paperwidth=148mm, paperheight=210mm,
 %   left=28mm,  %% or inner=23mm
@@ -41,19 +25,31 @@
 %   headsep=7mm,
 %   footskip=10mm
 %}
-% \usepackage[utf8]{inputenc}
-% \usepackage[T1]{fontenc}
 % \usepackage{lmodern}
 % \usepackage{textcomp}
 % \usepackage{microtype}
-\usepackage{enumitem}
-\usepackage{multicol}
 % \usepackage{graphicx}
 % \usepackage{xcolor}
-% \usepackage{titlesec}
 % \usepackage{hyperref}
 % \usepackage{makeidx}
 
+% Configuration des polices 
+\babelfont{rm}{Baskerville}
+\babelfont{sf}{Arial}
+\newfontfamily\titreFont{Amilya}[Path=./Amilya/, Extension=.ttf, UprightFont=*]
+% Définition des couleurs
+\definecolor{MyStrongBlue}{RGB}{0, 68, 148}
+\definecolor[named]{MyStrongBlue}{HTML}{304fac}
+\definecolor[named]{GreenTea}{HTML}{CAE8A2}
+\definecolor[named]{MilkTea}{HTML}{C5A16F}
+%
+\definecolor[named]{TitleBox}{HTML}{C5A16F}
+\definecolor[named]{AuthorName}{HTML}{f2dcbd}
+\definecolor[named]{ChapterBox}{HTML}{C5A16F}
+\definecolor[named]{ChapterTextBox}{HTML}{c78a36}
+\definecolor{ingredientcolor}{RGB}{34, 139, 34}
+\definecolor{cookwarecolor}{RGB}{149, 0, 237}
+\definecolor{timercolor}{RGB}{255, 140, 0}
 
 %% Command to hold chapter illustration image
 \newcommand\chapterillustration{}
@@ -65,7 +61,7 @@
 %\CenterWallPaper{1}{\chapterillustration}
 %% Draw a semi-transparent rectangle across the top
 \tikz[overlay,remember picture]
-  \fill[MyLightGrey,opacity=0]
+  \fill[GreenTea,opacity=0]
   (current page.south west) rectangle 
   ([yshift=-105mm] current page.north east);
   %% Check if on an odd or even page
@@ -82,8 +78,8 @@
 %      font=\sffamily\bfseries\huge] 
 %      at (current page.north west) 
 %      {\chaptername\ \thechapter};
-    \node[fill=MilkTea!80!black,text=white,
-      font=\Huge\bfseries, 
+    \node[fill=GreenTea!80!black,text=white,
+      font=\fontspec{Marker Felt}\Huge\bfseries, 
       inner ysep=12pt, inner xsep=20pt,
       rounded rectangle,anchor=east, 
       xshift=-40mm,yshift=-10mm] 
@@ -102,8 +98,8 @@
 %      font=\sffamily\bfseries\huge] 
 %      at (current page.north east)
 %      {\chaptername\ \thechapter};
-    \node[fill=MyLightGrey!80!black,text=white,
-      font=\Huge\bfseries,
+    \node[fill=ChapterTextBox!80!black,text=white,
+      font=\fontspec{Marker Felt}\Huge\bfseries,
       inner sep=12pt, inner xsep=20pt,
       rounded rectangle,anchor=west,
       xshift=20mm,yshift=-30mm] 
@@ -118,7 +114,7 @@
 \titleformat{name=\chapter,numberless}{}{}{0pt}{
 %% Draw a semi-transparent rectangle across the top
 \tikz[overlay,remember picture]
-  \fill[MyLightBlue,opacity=.7]
+  \fill[ChapterBox,opacity=.7]
   (current page.north west) rectangle 
   ([yshift=-3cm] current page.north east);
   %% Check if on an odd or even page
@@ -129,8 +125,8 @@
   %% near outer edge (near the right).
   \ifoddpage{
     \begin{tikzpicture}[overlay,remember picture]
-    \node[fill=MyStrongBlue!80!black,text=white,
-      font=\Huge\bfseries, 
+    \node[fill=ChapterTextBox!80!black,text=white,
+      font=\fontspec{Marker Felt}\Huge\bfseries,
       inner ysep=12pt, inner xsep=20pt,
       rounded rectangle,anchor=east, 
       xshift=-20mm,yshift=-30mm] 
@@ -143,7 +139,7 @@
   %% near spine edge (near the left).
   \else {
     \begin{tikzpicture}[overlay,remember picture]
-    \node[fill=MyStrongBlue!80!black,text=white,
+    \node[fill=ChapterTextBox!80!black,text=white,
       font=\Huge\bfseries,
       inner sep=12pt, inner xsep=20pt,
       rounded rectangle,anchor=west,
@@ -156,6 +152,33 @@
 \titlespacing*{\chapter}{0pt}{0pt}{135mm}
 \titlespacing*{name=\chapter,numberless}{0pt}{0pt}{50mm}
 
+%% Define how the part title is printed
+\titleformat{\part}[display]
+  {\thispagestyle{empty}}
+  {}
+  {0pt}
+  {
+    \begin{tikzpicture}[remember picture, overlay]
+        \node[
+            fill=TitleBox, 
+            text=Cornsilk, 
+            rounded corners=16pt,
+            drop shadow={
+                shadow xshift=5pt, 
+                shadow yshift=-5pt, 
+                opacity=0.4,
+                black
+            },
+            inner sep=36pt,
+            align=center,
+            font=\bfseries
+        ] at (current page.center) {
+            {\titreFont\fontsize{80pt}{60pt}\selectfont #1}
+        };
+    \end{tikzpicture}
+  }
+\titlespacing*{\part}{0pt}{0pt}{0pt}
+
 %% Set the uniform width of the colour box
 %% displaying the page number in footer
 %% to the width of "99"
@@ -167,13 +190,6 @@
 anchor=base,font=\sffamily\bfseries\small,
 text=white,fill=MyStrongBlue!80!black,text centered,
 text depth=2mm,text width=2mm+\pagenumwidth}}
-
-%% Concoct some colours of our own
-\definecolor[named]{MyLightGrey}{HTML}{aaaaaa}
-\definecolor[named]{MyLightBlue}{HTML}{a2d4e8}
-\definecolor[named]{MyStrongBlue}{HTML}{446ffc}
-\definecolor[named]{GreenTea}{HTML}{CAE8A2}
-\definecolor[named]{MilkTea}{HTML}{C5A16F}
 
 %%%%%%%%%%
 %%% Re-define running headers on non-chapter pages
@@ -258,6 +274,12 @@ text depth=2mm,text width=2mm+\pagenumwidth}}
 \title{Recettes de cuisine}
 \author{Marc}
 
+% Espacement : {commande}{gauche}{avant}{après}[dessous]
+% Le 3ème argument (avant) contrôle la hauteur du début du texte. 
+% On utilise une valeur faible (ex: 0pt ou même négative) pour remonter le titre.
+\titlespacing*{\chapter}{0pt}{-30pt}{20pt}
+
+
 \begin{document}
 \renewcommand{\contentsname}{Index}
 \xpatchcmd{\@chapter}{\addcontentsline{toc}{chapter}{\protect\numberline{\thechapter}#1}}{%
@@ -268,30 +290,40 @@ text depth=2mm,text width=2mm+\pagenumwidth}}
 %%%%%%%%%%%%%%
 %% Cover page
 %%%%%%%%%%%%%%
-
-%% No header nor footer on the cover
 \thispagestyle{empty}
 
-%% Cover illustration
-\ThisLLCornerWallPaper{1}{Mt-Blanc-Portrait2}
 
-%% Bar across the top
-\tikz[remember picture,overlay]%
-\node[fill=MyStrongBlue,text=white,font=\LARGE\bfseries,text=Cornsilk,%
-minimum width=\paperwidth,minimum height=5em,anchor=north]%
-at (current page.north){\scshape{Marc Augier}};
+\begin{tikzpicture}[remember picture, overlay]
+    \node[anchor=south west, inner sep=0pt] at (current page.south west) {
+        \makebox[\paperwidth]{\framebox(595,842){
+             \ThisLLCornerWallPaper{1}{couverture} 
+        }}
+    };
 
-\vspace*{2\baselineskip}
-
-{\bfseries\itshape\color{LightGoldenrod!50!Gold}\fontsize{36pt}{46pt}\selectfont
-Recettes de cuisine}
-
-\vspace*{2\baselineskip}
-
-\tikz[remember picture,overlay]%
-\node[fill=MyStrongBlue,font=\LARGE\bfseries,text=Cornsilk,%
-minimum width=\paperwidth,minimum height=3em,anchor=south]%
- at (current page.south) {Marc Augier};
+    % Superposition d'un léger voile pour la lisibilité si nécessaire
+    \fill[white, opacity=0.2] (current page.south west) rectangle (current page.north east);
+    
+    % Boîte de titre avec effet 3D (Shadow)
+    \node[
+        fill=TitleBox, 
+        text=Cornsilk, 
+        rounded corners=16pt,
+        drop shadow={
+            shadow xshift=5pt, 
+            shadow yshift=-5pt, 
+            opacity=0.4,
+            black
+        },
+        inner sep=36pt,
+        align=center,
+        font=\bfseries
+    ] at (current page.center) {
+        {\titreFont\fontsize{90pt}{60pt}\selectfont Nos recettes}
+    };
+    
+    % Signature en bas
+    \node[anchor=south, yshift=5mm, font=\LARGE\scshape, text=AuthorName] at (current page.south) {Marc Augier};
+\end{tikzpicture}
 
 \cleardoublepage
 
